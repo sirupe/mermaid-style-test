@@ -1,33 +1,20 @@
-### a. 새 상태 classDef + 새 전이 라벨 HTML
+### a. 영문 ID + 한글 별칭, 새 상태 classDef, 새 전이 라벨 HTML
 ```mermaid
 stateDiagram-v2
-  [*] --> 발급
-  발급 --> 사용: use()
-  발급 --> 만료알림: notifyExpiring() <span style='color:#d9480f'>new</span>
-  만료알림 --> 사용: use()
-  만료알림 --> 만료: expire()
-  발급 --> 만료: expire()
-  사용 --> [*]
-  만료 --> [*]
-  classDef added stroke:#d9480f,stroke-width:2px
-  classDef base stroke:#1a1a17
-  class 만료알림 added
-  class 발급,사용,만료 base
-```
-
-### b. ::: 문법
-```mermaid
-stateDiagram-v2
+  state "발급" as Issued
+  state "사용" as Used
+  state "만료 알림 발송 <font color='#d9480f'>new</font>" as Noticed
+  state "만료" as Expired
   [*] --> Issued
-  Issued --> Noticed:::added
-  Noticed --> Used
+  Issued --> Used: use()
+  Issued --> Noticed: notifyExpiring() <span style='color:#d9480f'>new</span>
+  Noticed --> Used: use()
+  Noticed --> Expired: expire()
+  Issued --> Expired: expire()
+  Used --> [*]
+  Expired --> [*]
   classDef added stroke:#d9480f,stroke-width:2px
-```
-
-### c. 상태 라벨에 HTML
-```mermaid
-stateDiagram-v2
-  state "만료알림 <font color='#d9480f'>new</font>" as N
-  [*] --> N
-  N --> [*]
+  classDef plain stroke:#1a1a17
+  class Noticed added
+  class Issued, Used, Expired plain
 ```
